@@ -51,7 +51,7 @@ select[data-field="team"]{display:none!important}
 
 </style></head><body><main class="shell"><header><div class="eyebrow">CV DAGANZO · TEMPORADA 2026/27</div><h1>Comunicar jornada</h1><p>Todos tus equipos, en un único envío. Prueba sin conexión a Sheets.</p></header><div class="card" style="margin-top:-8px;background:#fdf6e3;border-color:#edd69f"><strong>Modo demostración</strong><div class="small">Puedes revisar y confirmar el envío. Las respuestas solo se guardan en este navegador; todavía no llegan al club.</div></div>
 <div id="wait">Preparando el formulario…</div><div id="main"><section class="card"><h2>¿De qué fin de semana hablamos?</h2><p class="sub">Selecciona cualquier fecha de la jornada. Los partidos deben pertenecer a esa misma semana (lunes a domingo).</p><label class="title" for="weekend">Fecha de referencia</label><input type="date" id="weekend" required><p class="hint">Por defecto, el próximo sábado. Puedes cambiarlo para una jornada distinta.</p></section><section class="card" id="access-code-card"><label class="title" for="access-code">Código del club</label><input id="access-code" type="password" autocomplete="off" placeholder="Código facilitado por coordinación" maxlength="80"><p class="hint">Este código solo es necesario si el club lo ha activado.</p></section><div id="items"></div>
-<button type="button" id="add" class="add">＋ Añadir otro equipo o partido</button><div id="summary"></div><div id="error" role="alert" class="error" hidden></div><button id="submit" class="submit" type="button">Revisar y confirmar</button><div class="footer">Solo recibirás una confirmación al enviar. No es necesario iniciar sesión.</div></div><div id="result"></div></main>
+<button type="button" id="add" class="add">＋ Añadir otro equipo o partido</button><div id="summary"></div><div id="error" role="alert" class="error" hidden></div><button id="submit" class="submit" type="button">Revisar y confirmar</button><div class="footer">Esta versión de prueba no envía datos a Google Sheets.</div></div><div id="result"></div></main>
 <div class="review-backdrop" id="review" hidden role="presentation">
   <section class="review-dialog" role="dialog" aria-modal="true" aria-labelledby="review-title">
     <div class="review-heading"><div><h2 id="review-title">Confirmar jornada</h2><p id="review-week">Comprueba los datos antes de enviar.</p></div><button type="button" class="review-close" id="review-x" aria-label="Volver a editar">×</button></div>
@@ -59,7 +59,7 @@ select[data-field="team"]{display:none!important}
     <div class="review-list" id="review-list"></div>
     <div class="review-warning">Si ya comunicaste alguno de estos equipos para la misma jornada, este envío sustituirá todos sus datos anteriores. Si juega dos partidos, añade los dos antes de confirmar.</div>
     <div id="review-error" class="review-error" role="alert" hidden></div>
-    <div class="review-actions"><button type="button" class="review-edit" id="review-back">Volver a editar</button><button type="button" class="review-confirm" id="review-send">Confirmar y enviar al club</button></div>
+    <div class="review-actions"><button type="button" class="review-edit" id="review-back">Volver a editar</button><button type="button" class="review-confirm" id="review-send">Confirmar prueba</button></div>
   </section>
 </div>
 <script>
@@ -162,7 +162,7 @@ function openReview(){if(pending)return;error('');let payload;try{payload=collec
  });
  const playing=payload.items.filter(v=>v.playing).length,rests=payload.items.length-playing;
  $('review-counter').textContent=playing+' partido(s) · '+rests+' descanso(s)';
- $('review').hidden=false;$('review-send').disabled=false;$('review-send').textContent='Confirmar y enviar al club';
+ $('review').hidden=false;$('review-send').disabled=false;$('review-send').textContent='Confirmar prueba';
  $('review-back').disabled=false;$('review-x').disabled=false;
  $('review-back').focus({preventScroll:true});
 }
@@ -174,7 +174,7 @@ function sendConfirm(){if(pending||!reviewPayload)return;pending=true;
    $('review').hidden=true;document.body.style.overflow=reviewOrigin?.overflow||'';
    $('main').style.display='none';$('result').replaceChildren();
    const s=h('div',{class:'success'});s.append(h('h2',{text:'✓ Jornada comunicada'}));
-   s.append(h('p',{text:res.partidos+' partido(s) y '+res.descansan+' descanso(s) recibidos por el club.'}));
+   s.append(h('p',{text:res.partidos+' partido(s) y '+res.descansan+' descanso(s) guardados en esta prueba.'}));
    s.append(h('p',{text:'Prueba guardada en este navegador. En la versión real se guarda en Sheets.'}));
    if(res.warning)s.append(h('p',{class:'hint',text:res.warning}));
    const retry=h('button',{type:'button',text:'Comunicar otra jornada'});retry.addEventListener('click',()=>location.reload());s.append(retry);
