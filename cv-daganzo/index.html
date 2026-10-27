@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV Daganzo · Comunicar jornada</title>
+<style>
+:root{--blue:#0879f9;--navy:#07192c;--mid:#173754;--cyan:#46c5ff;--line:#dce5ed;--text:#14273a;--muted:#63768a;--bg:#f2f5f8;--green:#0d7454;--yellow:#ffd348}*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text)}.shell{max-width:760px;margin:auto;padding:0 14px 45px}header{background:linear-gradient(125deg,var(--navy),#0c4480);color:#fff;padding:28px 20px 26px;margin:0 -14px 22px;border-bottom:5px solid var(--cyan)}.eyebrow{letter-spacing:.16em;font-size:11px;font-weight:800;color:var(--cyan)}header h1{font-size:27px;line-height:1.13;margin:7px 0}header p{margin:0;color:#c5d6e9}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px;margin-bottom:15px;box-shadow:0 3px 18px #07192c08}.card h2{font-size:18px;margin:0 0 6px}.card p.sub{color:var(--muted);font-size:13px;margin:0 0 15px}label.title{font-size:13px;font-weight:750;display:block;margin:14px 0 7px}input,select{font:inherit;color:var(--text);background:#fff;width:100%;height:46px;padding:10px 12px;border:1px solid #c7d2de;border-radius:9px;outline:none}input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #0879f917}input[disabled]{background:#eaf0f5;color:#50667b}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.small{font-size:12px;color:var(--muted)}.toggle{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}.toggle button{border:1px solid #cbd7e2;background:#f7fafc;padding:13px 8px;min-height:48px;border-radius:10px;font-size:14px;font-weight:750;color:#354c60;cursor:pointer}.toggle button.active{border:2px solid var(--blue);background:#e5f1ff;color:#0555b4}.toggle button.rest.active{background:#fff1c3;border-color:#e5af16;color:#634b05}.rowtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.num{font-size:12px;letter-spacing:.05em;color:#37688e;font-weight:800}.remove{font-size:12px;border:0;background:transparent;color:#a13b38;cursor:pointer;padding:6px}.hint{font-size:12px;color:var(--muted);margin:8px 0 0}.rest-note{background:#fffae8;border-left:4px solid #edc34c;padding:13px;margin:12px 0 2px;border-radius:5px;color:#635015}.locationlocal{display:flex;gap:8px;align-items:center;color:var(--green);background:#e7f5f0;padding:12px;border-radius:9px;font-weight:750;margin-top:13px}.add{background:#fff;color:#075cb4;border:1.5px dashed #7baee0;font-weight:750;border-radius:10px;min-height:54px;width:100%;cursor:pointer;font-size:15px;margin:0 0 18px}.submit{background:var(--blue);color:white;min-height:56px;width:100%;border:0;border-radius:11px;cursor:pointer;font-size:16px;font-weight:850;box-shadow:0 6px 16px #0879f940}.submit:disabled{opacity:.55;cursor:wait}.error{background:#fff0ee;color:#8b2925;padding:14px;border:1px solid #f4b9b3;border-radius:9px;margin-bottom:14px}.success{background:#e5f8ef;border:1px solid #96cfb0;padding:18px;border-radius:12px;text-align:center;color:#135d40}.success h2{margin:0 0 8px}.success button{border:1px solid #0d7454;color:#0d7454;background:white;border-radius:9px;padding:12px;font-weight:750;cursor:pointer}.footer{text-align:center;font-size:12px;color:var(--muted);margin:15px 0}#items{margin-top:8px}#summary{margin:8px 1px 16px;color:#486275;font-size:13px}#main{display:none}#wait{text-align:center;padding:50px 20px;color:#5a6c7e}@media(max-width:460px){.two{grid-template-columns:1fr}header h1{font-size:24px}.card{padding:15px}}
+</style></head><body><main class="shell"><header><div class="eyebrow">CV DAGANZO · PRUEBA ONLINE · TEMPORADA 2026/27</div><h1>Comunicar jornada</h1><p>Todos tus equipos, en un único envío. Versión de prueba.</p></header>
+<div id="wait">Preparando el formulario…</div><div id="main"><section class="card"><h2>¿De qué fin de semana hablamos?</h2><p class="sub">Selecciona cualquier fecha de la jornada. Los partidos deben pertenecer a esa misma semana (lunes a domingo).</p><label class="title" for="weekend">Fecha de referencia</label><input type="date" id="weekend" required><p class="hint">Por defecto, el próximo sábado. Puedes cambiarlo para una jornada distinta.</p></section><div id="items"></div>
+<button type="button" id="add" class="add">＋ Añadir otro equipo o partido</button><div id="summary"></div><div id="error" role="alert" class="error" hidden></div><button id="submit" class="submit" type="button">Guardar prueba de jornada</button><div class="footer">DEMO: las respuestas se guardan solo en este navegador; no llegan al club ni a Google Sheets.</div></div><div id="result"></div></main>
+<script>
+const $=id=>document.getElementById(id);let teams=[],blocks=[],counter=0,pending=false;
+function h(tag,attrs={},content='') {const e=document.createElement(tag);for(const [k,v]of Object.entries(attrs)){if(k==='class')e.className=v;else if(k==='text')e.textContent=v;else e.setAttribute(k,v);}if(typeof content==='string')e.textContent=content;return e;}
+function dom(el,name,sel){return el.querySelector('[data-field="'+name+'"]')}
+function error(s){$('error').hidden=!s;$('error').textContent=s||'';if(s)$('error').scrollIntoView({block:'center',behavior:'smooth'});}
+function field(outer,name,label,type='text',attrs={}){const wrap=h('div');wrap.append(h('label',{class:'title',text:label}));const el=h('input',{type,'data-field':name,...attrs});wrap.append(el);outer.append(wrap);return el;}
+function addBlock(initial){counter++;const id=counter;const section=h('section',{class:'card', 'data-id':id});
+  const top=h('div',{class:'rowtop'});top.append(h('span',{class:'num',text:'EQUIPO / PARTIDO '+(blocks.length+1)}));const del=h('button',{type:'button',class:'remove',text:'Eliminar'});top.append(del);section.append(top);
+  const t=h('label',{class:'title',text:'Equipo'});section.append(t);const select=h('select',{'data-field':'team'});select.append(h('option',{value:'',text:'Selecciona un equipo'}));for(const n of teams)select.append(h('option',{value:n,text:n}));section.append(select);
+  const t2=h('label',{class:'title',text:'¿Juega este fin de semana?'});section.append(t2);
+  const toggle=h('div',{class:'toggle'});const yes=h('button',{type:'button',text:'🏐 Sí, juega'});const no=h('button',{type:'button',class:'rest',text:'💤 No juega'});toggle.append(yes,no);section.append(toggle);
+  const rest=h('div',{class:'rest-note',text:'Quedará registrado como DESCANSA esta jornada. No hay que rellenar fecha, hora ni ubicación.'});section.append(rest);
+  const details=h('div');section.append(details);const pair=h('div',{class:'two'});details.append(pair);field(pair,'date','Fecha del partido','date');field(pair,'time','Hora','time');
+  const cond=h('label',{class:'title',text:'Condición'});details.append(cond);const sides=h('div',{class:'toggle'});const local=h('button',{type:'button',text:'🏠 Local'}),away=h('button',{type:'button',text:'🚌 Visitante'});sides.append(local,away);details.append(sides);
+  const place=field(details,'place','Ubicación del partido','text',{placeholder:'Municipio o pabellón'});
+  const localMsg=h('div',{class:'locationlocal',text:'✓ Ubicación automática: Daganzo'});details.append(localMsg);
+  const rival=field(details,'rival','Rival (opcional)','text',{placeholder:'Si lo sabes, escríbelo',maxlength:'90'});
+  const b={id,el:section,select,yes,no,rest,details,local,away,place,localMsg,rival,playing:null,side:null};
+  yes.addEventListener('click',()=>{b.playing=true;const date=dom(b.el,'date');if(!date.value)date.value=$('weekend').value;update(b)});no.addEventListener('click',()=>{b.playing=false;update(b)});
+  local.addEventListener('click',()=>{b.side='Local';update(b)});away.addEventListener('click',()=>{b.side='Visitante';update(b)});
+  del.addEventListener('click',()=>{blocks=blocks.filter(v=>v!==b);section.remove();updateAll()});
+  blocks.push(b);$('items').append(section);
+  if(initial&&initial.team)b.select.value=initial.team;
+  if(initial&&typeof initial.playing==='boolean')b.playing=initial.playing;
+  if(initial&&initial.side)b.side=initial.side;
+  updateAll();return b;
+}
+function update(b){b.yes.classList.toggle('active',b.playing===true);b.no.classList.toggle('active',b.playing===false);
+  b.rest.hidden=b.playing!==false;b.details.hidden=b.playing!==true;
+  b.local.classList.toggle('active',b.side==='Local');b.away.classList.toggle('active',b.side==='Visitante');
+  b.place.parentElement.hidden=b.side!=='Visitante';b.localMsg.hidden=b.side!=='Local';
+  b.place.disabled=b.side!=='Visitante';updateSummary();
+}
+function updateAll(){for(const [i,b]of blocks.entries()){b.el.querySelector('.num').textContent='EQUIPO / PARTIDO '+(i+1);b.el.querySelector('.remove').hidden=blocks.length===1;update(b);}}
+function updateSummary(){const playing=blocks.filter(b=>b.playing===true).length;const rest=blocks.filter(b=>b.playing===false).length;$('summary').textContent=playing+' partido(s) · '+rest+' equipo(s) que descansan · '+blocks.length+' bloque(s)';}
+function collect(){const weekend=$('weekend').value;if(!weekend)throw Error('Selecciona la jornada.');
+  const monday=s=>{const d=new Date(s+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);return d.toISOString().slice(0,10)};
+  const set=new Map(),duplicates=new Set(),items=[];
+  for(const [idx,b]of blocks.entries()){
+    const n=idx+1,team=b.select.value;
+    if(!team)throw Error('Bloque '+n+': selecciona un equipo.');
+    if(b.playing===null)throw Error(team+': indica si juega o descansa.');
+    if(set.has(team)&&set.get(team)!==b.playing)throw Error(team+': no puede jugar y descansar en la misma jornada.');
+    set.set(team,b.playing);
+    if(!b.playing){if(items.some(x=>x.team===team&&!x.playing))throw Error(team+': descansa dos veces.');items.push({team,playing:false});continue;}
+    const date=dom(b.el,'date').value,time=dom(b.el,'time').value,side=b.side;
+    if(!date||monday(date)!==monday(weekend))throw Error(team+': selecciona una fecha de la misma jornada.');
+    if(!time)throw Error(team+': indica la hora.');
+    if(!side)throw Error(team+': indica Local o Visitante.');
+    if(side==='Visitante'&&!b.place.value.trim())throw Error(team+': escribe la ubicación del desplazamiento.');
+    const key=team+'|'+date+'|'+time;if(duplicates.has(key))throw Error(team+': has repetido el mismo partido.');duplicates.add(key);
+    items.push({team,playing:true,date,time,side,place:side==='Local'?'Daganzo':b.place.value.trim(),rival:b.rival.value.trim()});
+  }
+  return {weekend,items};
+}
+function submit(){if(pending)return;error('');let payload;try{payload=collect()}catch(e){error(e.message);return;}
+  pending=true;$('submit').disabled=true;$('submit').textContent='Enviando…';
+  if(typeof google==='undefined'||!google.script||!google.script.run){pending=false;$('submit').disabled=false;$('submit').textContent='Enviar jornada al club';error('Vista previa local: no se envían datos. Publica el archivo como aplicación web de Apps Script para recibir respuestas.');return;}
+  google.script.run.withSuccessHandler(res=>{pending=false;$('main').style.display='none';$('result').replaceChildren();const s=h('div',{class:'success'});s.append(h('h2',{text:'✓ Jornada recibida'}));s.append(h('p',{text:res.partidos+' partidos y '+res.descansan+' equipos que descansan guardados correctamente.'}));const retry=h('button',{type:'button',text:'Comunicar otra jornada'});retry.addEventListener('click',()=>location.reload());s.append(retry);$('result').append(s);window.scrollTo({top:0,behavior:'smooth'});})
+  .withFailureHandler(err=>{pending=false;$('submit').disabled=false;$('submit').textContent='Enviar jornada al club';error(err.message||'No se pudo enviar.');})
+  .enviarJornada(payload);
+}
+function init(res){teams=res.teams;$('weekend').value=res.suggestedWeekend;$('wait').hidden=true;$('main').style.display='block';addBlock();$('add').addEventListener('click',()=>{if(blocks.length>=20){error('Máximo 20 bloques por envío.');return;}error('');const b=addBlock();b.el.scrollIntoView({behavior:'smooth',block:'start'});});$('submit').addEventListener('click',submit);}
+
+// DEMO PUBLICA: emula el guardado local y la exportación JSON; no utiliza Google Sheets.
+const DEMO_KEY='cv_daganzo_demo_respuestas_v2';
+function jsonDeSemana(week,items) {
+ const sorted=items.filter(x=>x.playing).map(x=>({team:x.team,rival:x.rival||'',date:x.date.slice(8,10)+'/'+x.date.slice(5,7)+'/'+x.date.slice(0,4),time:x.time,place:x.side==='Local'?'Daganzo':x.place,side:x.side,color:/BLANCO/i.test(x.team)?'#F5F8FC':/VERDE/i.test(x.team)?'#008978':/AMARILLO/i.test(x.team)?'#FFD348':'#0879F9'}));
+ sorted.sort((a,b)=>a.date.split('/').reverse().join('').localeCompare(b.date.split('/').reverse().join(''))||a.time.localeCompare(b.time));
+ const rest=[...new Set(items.filter(x=>!x.playing).map(x=>x.team))].sort();
+ const from=new Date(week+'T12:00:00Z');const to=new Date(from);to.setUTCDate(to.getUTCDate()+6);
+ const format=d=>d.toLocaleDateString('es-ES',{day:'numeric',month:'short',timeZone:'UTC'}).toUpperCase().replace('.','');
+ const period=format(from)+' – '+format(to)+' '+to.getUTCFullYear();
+ return {version:1,template:'week',format:'post',brand:{club:'CLUB VOLEIBOL DAGANZO',handle:'@voleiboldaganzo_',email:'infodaganzovoleibol@gmail.com',season:'2026 / 27',sponsor:'',sponsorLogo:''},data:{week:{period,matches:sorted,restingTeams:rest}}};
+}
+function demoRead(){try{return JSON.parse(localStorage.getItem(DEMO_KEY)||'{}')}catch(e){return {}}}
+function demoDownload(content,filename){const url=URL.createObjectURL(new Blob([JSON.stringify(content,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+function demoSubmit(){error('');let payload;try{payload=collect()}catch(e){error(e.message);return;}
+ const d=new Date(payload.weekend+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);const week=d.toISOString().slice(0,10);
+ const saved=demoRead();const current=saved[week]||[];const replacements=new Set(payload.items.map(x=>x.team));
+ saved[week]=current.filter(x=>!replacements.has(x.team)).concat(payload.items);
+ try{localStorage.setItem(DEMO_KEY,JSON.stringify(saved))}catch(e){error('Este navegador no permite guardar la prueba; revisa el modo privado.');return;}
+ const result=jsonDeSemana(week,saved[week]);
+ $('main').querySelector('#main').style.display='none';const target=$('result');target.replaceChildren();
+ const wrap=h('div',{class:'success'});wrap.append(h('h2',{text:'✓ Prueba guardada en tu navegador'}));wrap.append(h('p',{text:result.data.week.matches.length+' partidos · '+result.data.week.restingTeams.length+' descansos, para la semana del '+week}));
+ const dl=h('button',{type:'button',text:'⬇ Descargar JSON para el generador'});dl.addEventListener('click',()=>demoDownload(result,'Jornada_'+week+'.json'));wrap.append(dl);
+ const preview=h('pre',{style:'white-space:pre-wrap;text-align:left;background:#fff;padding:12px;border-radius:10px;font-size:11px;max-height:300px;overflow:auto'});preview.textContent=JSON.stringify(result,null,2);wrap.append(preview);
+ const retry=h('button',{type:'button',text:'＋ Probar otra jornada',style:'margin-top:12px'});retry.addEventListener('click',()=>location.reload());wrap.append(retry);
+ target.append(wrap);window.scrollTo({top:0,behavior:'smooth'});
+}
+submit=demoSubmit;
+
+if(typeof google==='undefined'||!google.script||!google.script.run){init({teams:['SENIOR FEDERADO ♀️','JUNIOR MASCULINO FEDERADO ♂️','JUNIOR AMARILLO FEDERADO ♀️','JUVENIL BLANCO FEDERADO ♀️','CADETE AZUL FEDERADO ♀️','CADETE VERDE','INFANTIL AZUL','INFANTIL BLANCO','ALEVÍN AZUL','OPEN AZUL','BENJAMÍN','VETERANO VERDE ♂️','VETERANO BLANCO ♀️','VETERANO AZUL ♀️'],suggestedWeekend:'2026-10-31'});}
+else google.script.run.withSuccessHandler(init).withFailureHandler(e=>{$('wait').textContent='No se pudo cargar: '+(e.message||e);}).obtenerDatosFormulario();
+</script></body></html>
