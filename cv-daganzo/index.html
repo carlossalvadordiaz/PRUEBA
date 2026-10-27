@@ -1,19 +1,68 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CV Daganzo · Comunicar jornada</title>
+<title>CV Daganzo · Comunicar jornada (demo V2.2)</title>
 <style>
 :root{--blue:#0879f9;--navy:#07192c;--mid:#173754;--cyan:#46c5ff;--line:#dce5ed;--text:#14273a;--muted:#63768a;--bg:#f2f5f8;--green:#0d7454;--yellow:#ffd348}*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text)}.shell{max-width:760px;margin:auto;padding:0 14px 45px}header{background:linear-gradient(125deg,var(--navy),#0c4480);color:#fff;padding:28px 20px 26px;margin:0 -14px 22px;border-bottom:5px solid var(--cyan)}.eyebrow{letter-spacing:.16em;font-size:11px;font-weight:800;color:var(--cyan)}header h1{font-size:27px;line-height:1.13;margin:7px 0}header p{margin:0;color:#c5d6e9}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px;margin-bottom:15px;box-shadow:0 3px 18px #07192c08}.card h2{font-size:18px;margin:0 0 6px}.card p.sub{color:var(--muted);font-size:13px;margin:0 0 15px}label.title{font-size:13px;font-weight:750;display:block;margin:14px 0 7px}input,select{font:inherit;color:var(--text);background:#fff;width:100%;height:46px;padding:10px 12px;border:1px solid #c7d2de;border-radius:9px;outline:none}input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #0879f917}input[disabled]{background:#eaf0f5;color:#50667b}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.small{font-size:12px;color:var(--muted)}.toggle{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}.toggle button{border:1px solid #cbd7e2;background:#f7fafc;padding:13px 8px;min-height:48px;border-radius:10px;font-size:14px;font-weight:750;color:#354c60;cursor:pointer}.toggle button.active{border:2px solid var(--blue);background:#e5f1ff;color:#0555b4}.toggle button.rest.active{background:#fff1c3;border-color:#e5af16;color:#634b05}.rowtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.num{font-size:12px;letter-spacing:.05em;color:#37688e;font-weight:800}.remove{font-size:12px;border:0;background:transparent;color:#a13b38;cursor:pointer;padding:6px}.hint{font-size:12px;color:var(--muted);margin:8px 0 0}.rest-note{background:#fffae8;border-left:4px solid #edc34c;padding:13px;margin:12px 0 2px;border-radius:5px;color:#635015}.locationlocal{display:flex;gap:8px;align-items:center;color:var(--green);background:#e7f5f0;padding:12px;border-radius:9px;font-weight:750;margin-top:13px}.add{background:#fff;color:#075cb4;border:1.5px dashed #7baee0;font-weight:750;border-radius:10px;min-height:54px;width:100%;cursor:pointer;font-size:15px;margin:0 0 18px}.submit{background:var(--blue);color:white;min-height:56px;width:100%;border:0;border-radius:11px;cursor:pointer;font-size:16px;font-weight:850;box-shadow:0 6px 16px #0879f940}.submit:disabled{opacity:.55;cursor:wait}.error{background:#fff0ee;color:#8b2925;padding:14px;border:1px solid #f4b9b3;border-radius:9px;margin-bottom:14px}.success{background:#e5f8ef;border:1px solid #96cfb0;padding:18px;border-radius:12px;text-align:center;color:#135d40}.success h2{margin:0 0 8px}.success button{border:1px solid #0d7454;color:#0d7454;background:white;border-radius:9px;padding:12px;font-weight:750;cursor:pointer}.footer{text-align:center;font-size:12px;color:var(--muted);margin:15px 0}#items{margin-top:8px}#summary{margin:8px 1px 16px;color:#486275;font-size:13px}#main{display:none}#wait{text-align:center;padding:50px 20px;color:#5a6c7e}@media(max-width:460px){.two{grid-template-columns:1fr}header h1{font-size:24px}.card{padding:15px}}
-</style></head><body><main class="shell"><header><div class="eyebrow">CV DAGANZO · PRUEBA ONLINE · TEMPORADA 2026/27</div><h1>Comunicar jornada</h1><p>Todos tus equipos, en un único envío. Versión de prueba.</p></header>
+
+/* Selector propio: evita el picker nativo ilegible en algunos iPhone/WebViews. */
+:root{color-scheme:light}input,button{color-scheme:light}
+select[data-field="team"]{display:none!important}
+.team-selector-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:51px;background:#fff;border:1.5px solid #c7d2de;color:#14273a;-webkit-text-fill-color:#14273a;text-align:left;border-radius:9px;font:600 15px/1.3 system-ui,-apple-system,sans-serif;padding:12px 13px;cursor:pointer}
+.team-selector-trigger.placeholder{color:#63768a;-webkit-text-fill-color:#63768a}
+.team-selector-trigger:focus-visible{outline:3px solid #0879f944;outline-offset:2px}
+.team-selector-trigger .chevron{color:#0879f9;-webkit-text-fill-color:#0879f9;font-weight:900;font-size:18px}
+.picker-overlay{position:fixed;inset:0;z-index:10000;background:rgba(7,25,44,.78);display:flex;align-items:flex-end;justify-content:center;color:#14273a;-webkit-text-fill-color:#14273a}
+.picker-overlay[hidden]{display:none!important}
+.picker-sheet{background:#fff;width:100%;max-width:680px;max-height:94vh;max-height:94dvh;display:flex;flex-direction:column;border-radius:18px 18px 0 0;box-shadow:0 -8px 40px #06132355;overflow:hidden}
+.picker-header{padding:18px 18px 11px;border-bottom:1px solid #dce5ed;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.picker-header strong{font-size:18px;color:#10263c;-webkit-text-fill-color:#10263c}
+.picker-close{background:#edf2f7;border:0;border-radius:100px;color:#172e46;-webkit-text-fill-color:#172e46;width:44px;height:44px;font:700 25px/1 system-ui;cursor:pointer}
+.picker-search-wrap{padding:10px 16px;border-bottom:1px solid #e8edf2}
+.picker-search{font-size:16px!important;min-height:46px!important;background:#f7fafc!important;color:#10263c!important;-webkit-text-fill-color:#10263c!important}
+.picker-results{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:8px 14px calc(20px + env(safe-area-inset-bottom, 0px))}
+.picker-option{display:flex;align-items:center;justify-content:space-between;text-align:left;width:100%;min-height:55px;border:0;border-bottom:1px solid #e8edf2;border-radius:0;padding:11px 9px;background:#fff;color:#14273a;-webkit-text-fill-color:#14273a;font:650 14px/1.4 system-ui,-apple-system,sans-serif;cursor:pointer}
+.picker-option.selected{color:#075cb4;-webkit-text-fill-color:#075cb4;background:#eaf3ff}
+.picker-option:active{background:#dcecff}
+.picker-empty{padding:20px;color:#44586e;-webkit-text-fill-color:#44586e;text-align:center}
+@media(min-width:700px){.picker-overlay{align-items:center;padding:24px}.picker-sheet{max-height:min(85vh,750px);border-radius:18px}}
+</style></head><body><main class="shell"><header><div class="eyebrow">CV DAGANZO · PRUEBA V2.2 · TEMPORADA 2026/27</div><h1>Comunicar jornada</h1><p>Todos tus equipos, en un único envío. Versión de prueba.</p></header>
 <div id="wait">Preparando el formulario…</div><div id="main"><section class="card"><h2>¿De qué fin de semana hablamos?</h2><p class="sub">Selecciona cualquier fecha de la jornada. Los partidos deben pertenecer a esa misma semana (lunes a domingo).</p><label class="title" for="weekend">Fecha de referencia</label><input type="date" id="weekend" required><p class="hint">Por defecto, el próximo sábado. Puedes cambiarlo para una jornada distinta.</p></section><div id="items"></div>
 <button type="button" id="add" class="add">＋ Añadir otro equipo o partido</button><div id="summary"></div><div id="error" role="alert" class="error" hidden></div><button id="submit" class="submit" type="button">Guardar prueba de jornada</button><div class="footer">DEMO: las respuestas se guardan solo en este navegador; no llegan al club ni a Google Sheets.</div></div><div id="result"></div></main>
 <script>
 const $=id=>document.getElementById(id);let teams=[],blocks=[],counter=0,pending=false;
-function h(tag,attrs={},content='') {const e=document.createElement(tag);for(const [k,v]of Object.entries(attrs)){if(k==='class')e.className=v;else if(k==='text')e.textContent=v;else e.setAttribute(k,v);}if(typeof content==='string')e.textContent=content;return e;}
+function h(tag,attrs={},content=undefined) {const e=document.createElement(tag);for(const [k,v]of Object.entries(attrs)){if(k==='class')e.className=v;else if(k==='text')e.textContent=v;else e.setAttribute(k,v);}if(typeof content==='string')e.textContent=content;return e;}
 function dom(el,name,sel){return el.querySelector('[data-field="'+name+'"]')}
 function error(s){$('error').hidden=!s;$('error').textContent=s||'';if(s)$('error').scrollIntoView({block:'center',behavior:'smooth'});}
 function field(outer,name,label,type='text',attrs={}){const wrap=h('div');wrap.append(h('label',{class:'title',text:label}));const el=h('input',{type,'data-field':name,...attrs});wrap.append(el);outer.append(wrap);return el;}
+// Selector accesible propio; no usa la rueda iOS ni sus colores heredados.
+let teamPicker=null;
+function closeTeamPicker(){if(!teamPicker)return;const p=teamPicker;teamPicker=null;p.overlay.remove();document.body.style.overflow=p.oldOverflow;p.trigger.focus({preventScroll:true});}
+function openTeamPicker(b){
+  if(teamPicker)closeTeamPicker();
+  const overlay=h('div',{class:'picker-overlay',role:'presentation'});
+  const sheet=h('div',{class:'picker-sheet',role:'dialog','aria-modal':'true','aria-label':'Seleccionar equipo'});
+  const header=h('div',{class:'picker-header'}),title=h('strong',{text:'Selecciona un equipo'});
+  const close=h('button',{type:'button',class:'picker-close','aria-label':'Cerrar',text:'×'});
+  header.append(title,close);sheet.append(header);
+  const sw=h('div',{class:'picker-search-wrap'}),search=h('input',{type:'search',class:'picker-search',placeholder:'Buscar equipo…','aria-label':'Buscar equipo',autocomplete:'off'});
+  sw.append(search);sheet.append(sw);
+  const results=h('div',{class:'picker-results',role:'listbox','aria-label':'Equipos disponibles'});sheet.append(results);overlay.append(sheet);
+  const oldOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
+  teamPicker={overlay,trigger:b.pickBtn,oldOverflow};
+  function redraw(){results.replaceChildren();const q=search.value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();let count=0;
+    for(const team of teams){const normalized=team.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();if(q&&!normalized.includes(q))continue;
+      count++;const opt=h('button',{type:'button',class:'picker-option'+(b.select.value===team?' selected':''),role:'option','aria-selected':String(b.select.value===team)});
+      opt.append(h('span',{text:team}));if(b.select.value===team)opt.append(h('span',{text:'✓','aria-hidden':'true'}));
+      opt.addEventListener('click',()=>{b.select.value=team;closeTeamPicker();update(b);});results.append(opt);
+    }if(!count)results.append(h('div',{class:'picker-empty',text:'No se encontraron equipos'}));
+  }
+  redraw();search.addEventListener('input',redraw);close.addEventListener('click',closeTeamPicker);
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeTeamPicker();});
+  overlay.addEventListener('keydown',e=>{if(e.key==='Escape')closeTeamPicker();});
+  document.body.append(overlay);
+}
 function addBlock(initial){counter++;const id=counter;const section=h('section',{class:'card', 'data-id':id});
   const top=h('div',{class:'rowtop'});top.append(h('span',{class:'num',text:'EQUIPO / PARTIDO '+(blocks.length+1)}));const del=h('button',{type:'button',class:'remove',text:'Eliminar'});top.append(del);section.append(top);
-  const t=h('label',{class:'title',text:'Equipo'});section.append(t);const select=h('select',{'data-field':'team'});select.append(h('option',{value:'',text:'Selecciona un equipo'}));for(const n of teams)select.append(h('option',{value:n,text:n}));section.append(select);
+  const t=h('label',{class:'title',text:'Equipo'});section.append(t);const select=h('select',{'data-field':'team','aria-hidden':'true',tabindex:'-1'});select.append(h('option',{value:'',text:'Selecciona un equipo'}));for(const n of teams)select.append(h('option',{value:n,text:n}));section.append(select);const pickBtn=h('button',{type:'button',class:'team-selector-trigger placeholder','aria-label':'Elegir equipo'});section.append(pickBtn);pickBtn.addEventListener('click',()=>openTeamPicker(b));
   const t2=h('label',{class:'title',text:'¿Juega este fin de semana?'});section.append(t2);
   const toggle=h('div',{class:'toggle'});const yes=h('button',{type:'button',text:'🏐 Sí, juega'});const no=h('button',{type:'button',class:'rest',text:'💤 No juega'});toggle.append(yes,no);section.append(toggle);
   const rest=h('div',{class:'rest-note',text:'Quedará registrado como DESCANSA esta jornada. No hay que rellenar fecha, hora ni ubicación.'});section.append(rest);
@@ -22,7 +71,7 @@ function addBlock(initial){counter++;const id=counter;const section=h('section',
   const place=field(details,'place','Ubicación del partido','text',{placeholder:'Municipio o pabellón'});
   const localMsg=h('div',{class:'locationlocal',text:'✓ Ubicación automática: Daganzo'});details.append(localMsg);
   const rival=field(details,'rival','Rival (opcional)','text',{placeholder:'Si lo sabes, escríbelo',maxlength:'90'});
-  const b={id,el:section,select,yes,no,rest,details,local,away,place,localMsg,rival,playing:null,side:null};
+  const b={id,el:section,select,pickBtn,yes,no,rest,details,local,away,place,localMsg,rival,playing:null,side:null};
   yes.addEventListener('click',()=>{b.playing=true;const date=dom(b.el,'date');if(!date.value)date.value=$('weekend').value;update(b)});no.addEventListener('click',()=>{b.playing=false;update(b)});
   local.addEventListener('click',()=>{b.side='Local';update(b)});away.addEventListener('click',()=>{b.side='Visitante';update(b)});
   del.addEventListener('click',()=>{blocks=blocks.filter(v=>v!==b);section.remove();updateAll()});
@@ -32,7 +81,7 @@ function addBlock(initial){counter++;const id=counter;const section=h('section',
   if(initial&&initial.side)b.side=initial.side;
   updateAll();return b;
 }
-function update(b){b.yes.classList.toggle('active',b.playing===true);b.no.classList.toggle('active',b.playing===false);
+function update(b){b.pickBtn.replaceChildren(h('span',{text:b.select.value||'Seleccionar equipo'}),h('span',{class:'chevron',text:'▾','aria-hidden':'true'}));b.pickBtn.classList.toggle('placeholder',!b.select.value);b.yes.classList.toggle('active',b.playing===true);b.no.classList.toggle('active',b.playing===false);
   b.rest.hidden=b.playing!==false;b.details.hidden=b.playing!==true;
   b.local.classList.toggle('active',b.side==='Local');b.away.classList.toggle('active',b.side==='Visitante');
   b.place.parentElement.hidden=b.side!=='Visitante';b.localMsg.hidden=b.side!=='Local';
@@ -88,7 +137,7 @@ function demoSubmit(){error('');let payload;try{payload=collect()}catch(e){error
  saved[week]=current.filter(x=>!replacements.has(x.team)).concat(payload.items);
  try{localStorage.setItem(DEMO_KEY,JSON.stringify(saved))}catch(e){error('Este navegador no permite guardar la prueba; revisa el modo privado.');return;}
  const result=jsonDeSemana(week,saved[week]);
- $('main').querySelector('#main').style.display='none';const target=$('result');target.replaceChildren();
+ $('main').style.display='none';const target=$('result');target.replaceChildren();
  const wrap=h('div',{class:'success'});wrap.append(h('h2',{text:'✓ Prueba guardada en tu navegador'}));wrap.append(h('p',{text:result.data.week.matches.length+' partidos · '+result.data.week.restingTeams.length+' descansos, para la semana del '+week}));
  const dl=h('button',{type:'button',text:'⬇ Descargar JSON para el generador'});dl.addEventListener('click',()=>demoDownload(result,'Jornada_'+week+'.json'));wrap.append(dl);
  const preview=h('pre',{style:'white-space:pre-wrap;text-align:left;background:#fff;padding:12px;border-radius:10px;font-size:11px;max-height:300px;overflow:auto'});preview.textContent=JSON.stringify(result,null,2);wrap.append(preview);
